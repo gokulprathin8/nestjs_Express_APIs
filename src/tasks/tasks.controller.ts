@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Patch, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Patch, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { Task, TaskStatus } from './tasks.model';
 import { CreateTaskDTO } from './dto/create-task.dto';
@@ -19,15 +19,11 @@ export class TasksController {
 
     @Get('/:id')
     getTaskById(@Param('id') id: string) {
-        if (this.tasksService.getTaskById(id)) {
             return this.tasksService.getTaskById(id);
-        }
-        else {
-            return {"msg": "no match found"}
-        }
     }
 
     @Post()
+    @UsePipes(ValidationPipe)
     createTask(
         @Body() createTaskDTO: CreateTaskDTO
     ): Task{
@@ -36,8 +32,8 @@ export class TasksController {
 
     @Delete('/:id')
     deleteTask(@Param('id') id:string) {
-        this.tasksService.deleteTask(id)
-        return {"msg": id + " object deleted"}
+        const result = this.tasksService.deleteTask(id)
+        return result
     }
 
     @Patch('/:id/status')
