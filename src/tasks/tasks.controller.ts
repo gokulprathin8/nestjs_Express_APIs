@@ -11,7 +11,7 @@ export class TasksController {
     @Get()
     getTasks(@Query() filterDto: GetTasksFilterDTO): Task[] {
         if (Object.keys(filterDto).length) {
-            // return this.tasksService.getTasksWithFilters(filterDto);    
+            return this.tasksService.getTasksWithFilters(filterDto);
         } else {
             return this.tasksService.getAllTasks();
         }

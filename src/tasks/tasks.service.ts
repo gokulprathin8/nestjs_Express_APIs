@@ -20,13 +20,23 @@ export class TasksService {
         return this.tasks.find(task => task.id == id);
     }
 
-    getTasksWithFilters(filterDto: GetTasksFilterDTO){
-        const { status, search } = filterDto
+    getTasksWithFilters(filterDto: GetTasksFilterDTO): Task[]{
+        const { status, search } = filterDto;
+        console.log(search);
 
         let tasks = this.getAllTasks();
+
         if (status) {
-            // tasks = tasks.filter
+            tasks = tasks.filter(task => task.status === status);
         }
+
+        if (search) {
+            tasks = tasks.filter(task =>
+                task.title.includes(search) || task.description.includes(search),
+            );
+        }
+
+        return tasks;
     }
 
     createTask(createTaskDTO: CreateTaskDTO): Task {
